@@ -158,25 +158,40 @@ function ChanceLineDrawing() {
                 strokeWidth="2"
                 strokeLinecap="round"
             />
-            {[0, 0.5, 1].map((tick) => (
-                <line
-                    key={tick}
-                    x1={lineX(tick)}
-                    y1={LINE_Y - 6}
-                    x2={lineX(tick)}
-                    y2={LINE_Y + 6}
-                    stroke={INK_QUIET}
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                />
-            ))}
-            <text x={LINE_LEFT} y={LINE_Y + 26} fill={INK_STRUCTURE} fontSize="11" textAnchor="middle">
+            {Array.from({ length: SWEET_COUNT + 1 }, (_, step) => {
+                const p = step / SWEET_COUNT;
+                const isMajor = step === 0 || step === SWEET_COUNT / 2 || step === SWEET_COUNT;
+                return (
+                    <g key={step}>
+                        <line
+                            x1={lineX(p)}
+                            y1={LINE_Y - (isMajor ? 6 : 4)}
+                            x2={lineX(p)}
+                            y2={LINE_Y + (isMajor ? 6 : 4)}
+                            stroke={INK_QUIET}
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                        />
+                        <text
+                            x={lineX(p)}
+                            y={LINE_Y + 24}
+                            fill={isMajor ? INK : INK_STRUCTURE}
+                            fontSize="11"
+                            textAnchor="middle"
+                            style={{ fontVariantNumeric: "tabular-nums" }}
+                        >
+                            {formatChance(p)}
+                        </text>
+                    </g>
+                );
+            })}
+            <text x={LINE_LEFT} y={LINE_Y + 42} fill={INK_STRUCTURE} fontSize="11" textAnchor="middle">
                 impossible
             </text>
-            <text x={lineX(0.5)} y={LINE_Y + 26} fill={INK_STRUCTURE} fontSize="11" textAnchor="middle">
+            <text x={lineX(0.5)} y={LINE_Y + 42} fill={INK_STRUCTURE} fontSize="11" textAnchor="middle">
                 even chance
             </text>
-            <text x={LINE_RIGHT} y={LINE_Y + 26} fill={INK_STRUCTURE} fontSize="11" textAnchor="middle">
+            <text x={LINE_RIGHT} y={LINE_Y + 42} fill={INK_STRUCTURE} fontSize="11" textAnchor="middle">
                 certain
             </text>
 
