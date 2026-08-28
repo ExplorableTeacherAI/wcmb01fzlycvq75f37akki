@@ -3,7 +3,7 @@
  * ==========================================================
  * The student commits to a guess before anything is counted: drag the teal
  * marker along the 0 to 1 line, then press Check. The true chance appears in
- * indigo, and the gap between the two markers is drawn. Clicking a sweet
+ * pink, and the gap between the two markers is drawn. Clicking a sweet
  * changes the bag, so the wrong belief can be tested again and again.
  */
 
@@ -53,8 +53,8 @@ const LINE_Y = 214;
 const INK = "#334155";
 const INK_STRUCTURE = "#64748B";
 const INK_QUIET = "#CBD5E1";
-const PAPER_FILL = "#F1F5F9";
-const STRAWBERRY = "#8E90F5";
+const STRAWBERRY = "#F8A0CD"; // soft strawberry pink
+const LEMON = "#F7B23B"; // warm lemon yellow
 const GUESS = "#62D0AD";
 
 const sweetX = (index: number) => SWEET_FIRST_X + index * SWEET_PITCH;
@@ -128,8 +128,8 @@ function ChanceLineDrawing() {
                             cx={sweetX(index)}
                             cy={SWEET_Y}
                             r={SWEET_RADIUS}
-                            fill={isStrawberry ? STRAWBERRY : PAPER_FILL}
-                            stroke={isStrawberry ? STRAWBERRY : INK_STRUCTURE}
+                            fill={isStrawberry ? STRAWBERRY : LEMON}
+                            stroke={isStrawberry ? STRAWBERRY : LEMON}
                             strokeWidth="2"
                             style={{ transition: "fill 150ms ease, stroke 150ms ease" }}
                         />
@@ -143,7 +143,7 @@ function ChanceLineDrawing() {
                 </text>
             )}
             {strawberry < SWEET_COUNT && (
-                <text x={lemonRunCentre} y={SWEET_Y + 36} fill={INK_STRUCTURE} fontSize="12" textAnchor="middle">
+                <text x={lemonRunCentre} y={SWEET_Y + 36} fill={LEMON} fontSize="12" textAnchor="middle">
                     lemon
                 </text>
             )}
@@ -194,7 +194,7 @@ function ChanceLineDrawing() {
                 />
             )}
 
-            {/* The true chance — appears in indigo, the strawberry colour. */}
+            {/* The true chance — appears in the strawberry pink. */}
             {checked && (
                 <g style={{ transition: "opacity 200ms ease" }}>
                     <line
@@ -331,9 +331,9 @@ export const fiftyFiftyBlocks: ReactElement[] = [
                     {...numberPropsFromDefinition(getVariableInfo("guessChance"))}
                     formatValue={(value) => `${Math.round(value * 100)}%`}
                 />
-                , and the true chance is the indigo marker. Two possible flavours do not
+                , and the true chance is the pink marker. Two possible flavours do not
                 mean two equal chances. Click any sweet to change the bag, and the
-                indigo marker moves at once.
+                pink marker moves at once.
             </EditableParagraph>
         </Block>
     </StackLayout>,
@@ -357,7 +357,7 @@ export const fiftyFiftyBlocks: ReactElement[] = [
                         steps: [
                             {
                                 gesture: "click",
-                                label: "Click sweets until only two are indigo",
+                                label: "Click sweets until only two are pink",
                                 position: { x: "24%", y: "24%" },
                                 completionVar: "chanceLineStrawberry",
                                 completionValue: 2,
@@ -365,7 +365,7 @@ export const fiftyFiftyBlocks: ReactElement[] = [
                             },
                             {
                                 gesture: "click",
-                                label: "Now check the guess and read where the indigo marker lands",
+                                label: "Now check the guess and read where the pink marker lands",
                                 position: { x: "50%", y: "88%" },
                                 completionVar: "chanceLineChecked",
                                 completionValue: 1,
