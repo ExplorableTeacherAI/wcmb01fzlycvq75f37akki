@@ -82,6 +82,19 @@ export interface VariableDefinition {
  */
 export const variableDefinitions: Record<string, VariableDefinition> = {
     // ─────────────────────────────────────────
+    // SECTION 1 — Chance and Probability
+    // ─────────────────────────────────────────
+    everydayChance: {
+        defaultValue: 'a song on shuffle',
+        type: 'select',
+        label: 'Everyday chance',
+        description: 'An everyday situation the student cycles through in the opening',
+        options: ['a song on shuffle', 'a raffle ticket', 'a penalty kick'],
+        color: '#62D0AD',
+        bgColor: 'rgba(98, 208, 173, 0.18)',
+    },
+
+    // ─────────────────────────────────────────
     // SECTION 2 — Listing Every Outcome
     // ─────────────────────────────────────────
     outcomeListedMask: {

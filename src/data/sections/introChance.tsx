@@ -8,7 +8,21 @@
 import { type ReactElement } from "react";
 import { StackLayout } from "@/components/layouts";
 import { Block } from "@/components/templates";
-import { EditableH1, EditableParagraph } from "@/components/atoms";
+import { EditableH1, EditableParagraph, InlineToggle } from "@/components/atoms";
+import { useVar } from "@/stores";
+import { getVariableInfo, togglePropsFromDefinition } from "../variables";
+
+/** The clause that follows whichever everyday situation is showing. */
+function EverydayChanceClause() {
+    const situation = useVar<string>("everydayChance", "a song on shuffle");
+    if (situation === "a raffle ticket") {
+        return <span>is worth more the more tickets you hold.</span>;
+    }
+    if (situation === "a penalty kick") {
+        return <span>is never really fifty-fifty, whatever the commentator says.</span>;
+    }
+    return <span>gives every track the same chance of being next.</span>;
+}
 
 export const introChanceBlocks: ReactElement[] = [
     <StackLayout key="layout-intro-chance-title" maxWidth="xl">
@@ -42,9 +56,16 @@ export const introChanceBlocks: ReactElement[] = [
     <StackLayout key="layout-intro-chance-promise" maxWidth="xl">
         <Block id="intro-chance-promise" padding="sm">
             <EditableParagraph id="para-intro-chance-promise" blockId="intro-chance-promise">
-                By the end of this page you will be able to work out the chance of one
-                pick and write it as a fraction, then simplify it or turn it into a
-                percentage, exactly as you already do with fractions.
+                Chance runs through the rest of your day as well:{" "}
+                <InlineToggle
+                    id="toggle-intro-everyday-chance"
+                    varName="everydayChance"
+                    options={["a song on shuffle", "a raffle ticket", "a penalty kick"]}
+                    {...togglePropsFromDefinition(getVariableInfo("everydayChance"))}
+                />
+                {" "}<EverydayChanceClause /> By the end of this page you will be able to
+                work out the chance of one pick and write it as a fraction, then simplify
+                it or turn it into a percentage.
             </EditableParagraph>
         </Block>
     </StackLayout>,

@@ -361,6 +361,18 @@ function FractionValueFigure() {
     );
 }
 
+/** The same fraction, read out for a real class raffle. */
+function RaffleReadout() {
+    const strawberry = useVar<number>("fractionBagStrawberry", DEFAULT_STRAWBERRY);
+    const divisor = strawberry === 0 ? SWEET_COUNT : greatestCommonDivisor(strawberry, SWEET_COUNT);
+    const simplified = `${strawberry / divisor}/${SWEET_COUNT / divisor}`;
+    return (
+        <span style={{ color: ACCENT, fontVariantNumeric: "tabular-nums" }}>
+            {`${strawberry} out of ${SWEET_COUNT}, or ${simplified}, or ${formatChance(strawberry / SWEET_COUNT)}`}
+        </span>
+    );
+}
+
 // ── Blocks ───────────────────────────────────────────────────────────────────
 
 export const chanceAsFractionBlocks: ReactElement[] = [
@@ -439,6 +451,20 @@ export const chanceAsFractionBlocks: ReactElement[] = [
                 Here is the challenge: build the bag where the chance of strawberry is
                 exactly one half. With ten sweets there is only one way to do it. That is
                 the only bag where fifty-fifty is the honest answer.
+            </EditableParagraph>
+        </Block>
+    </StackLayout>,
+
+    <StackLayout key="layout-chance-fraction-raffle" maxWidth="xl">
+        <Block id="chance-fraction-raffle" padding="sm">
+            <EditableParagraph id="para-chance-fraction-raffle" blockId="chance-fraction-raffle">
+                Swap the sweets for a class raffle. Ten tickets go into the hat and you
+                hold{" "}
+                <InlineScrubbleNumber
+                    varName="fractionBagStrawberry"
+                    {...numberPropsFromDefinition(getVariableInfo("fractionBagStrawberry"))}
+                />
+                {" "}of them, so your chance of hearing your own name is <RaffleReadout />.
             </EditableParagraph>
         </Block>
     </StackLayout>,
