@@ -84,6 +84,16 @@ initializeVariableColors(variableDefinitions);
  * check your .env file and set VITE_SHOW_EXAMPLES=false.
  */
 
+import { introChanceBlocks } from "./sections/introChance";
+import { listingOutcomesBlocks } from "./sections/listingOutcomes";
+import { fiftyFiftyBlocks } from "./sections/fiftyFifty";
+import { chanceAsFractionBlocks } from "./sections/chanceAsFraction";
+import { wrappingUpBlocks } from "./sections/wrappingUp";
+
 export const blocks: ReactElement[] = [
-    // Start adding your blocks here!
+    ...introChanceBlocks,
+    ...listingOutcomesBlocks,
+    ...fiftyFiftyBlocks,
+    ...chanceAsFractionBlocks,
+    ...wrappingUpBlocks,
 ];

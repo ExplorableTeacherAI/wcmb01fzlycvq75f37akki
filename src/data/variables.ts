@@ -81,84 +81,129 @@ export interface VariableDefinition {
  *    { defaultValue: { x: 5, y: 10 }, type: 'object', schema: '{ x: number, y: number }' }
  */
 export const variableDefinitions: Record<string, VariableDefinition> = {
-    // ========================================
-    // ADD YOUR VARIABLES HERE
-    // ========================================
-
-    // Uncomment and modify these examples for your lesson:
-
-    /*
     // ─────────────────────────────────────────
-    // NUMBER - Use with sliders
+    // SECTION 2 — Listing Every Outcome
     // ─────────────────────────────────────────
-    myValue: {
-        defaultValue: 5,
+    outcomeListedMask: {
+        defaultValue: '0000000000',
+        type: 'text',
+        label: 'Listed sweets',
+        description: 'One character per sweet: 1 when that sweet has been moved into the list of possible picks',
+    },
+    outcomeListedCount: {
+        defaultValue: 0,
         type: 'number',
-        label: 'My Value',
-        description: 'A number that controls something',
-        unit: 'm',           // optional unit display
+        label: 'Outcomes listed',
+        description: 'How many sweets have been listed as possible picks so far',
         min: 0,
         max: 10,
-        step: 0.5,
+        step: 1,
+        color: '#8E90F5',
     },
-
-    // ─────────────────────────────────────────
-    // TEXT - Free text input
-    // ─────────────────────────────────────────
-    lessonTitle: {
-        defaultValue: 'My Lesson',
+    outcomeBagHighlight: {
+        defaultValue: '',
         type: 'text',
-        label: 'Lesson Title',
-        description: 'The title of your lesson',
-        placeholder: 'Enter a title...',
+        label: 'Outcome figure highlight',
+        description: 'Which part of the listing figure is currently highlighted: bag or list',
+        color: '#8E90F5',
+        bgColor: 'rgba(142, 144, 245, 0.22)',
     },
 
     // ─────────────────────────────────────────
-    // SELECT - Dropdown with options
+    // SECTION 3 — Is It Always 50-50?
     // ─────────────────────────────────────────
-    difficulty: {
-        defaultValue: 'medium',
+    guessChance: {
+        defaultValue: 0.5,
+        type: 'number',
+        label: 'Your guess',
+        description: 'Where the student predicts the chance of strawberry sits on the 0 to 1 line',
+        min: 0,
+        max: 1,
+        step: 0.05,
+        color: '#62D0AD',
+    },
+    chanceLineStrawberry: {
+        defaultValue: 4,
+        type: 'number',
+        label: 'Strawberry sweets',
+        description: 'How many of the ten sweets in the prediction bag are strawberry',
+        min: 0,
+        max: 10,
+        step: 1,
+        color: '#8E90F5',
+    },
+    chanceLineChecked: {
+        defaultValue: 0,
+        type: 'number',
+        label: 'Guess checked',
+        description: 'Set to 1 once the student has revealed the true chance marker',
+        min: 0,
+        max: 1,
+        step: 1,
+    },
+
+    // ─────────────────────────────────────────
+    // SECTION 4 — Chance as a Fraction
+    // ─────────────────────────────────────────
+    fractionBagStrawberry: {
+        defaultValue: 3,
+        type: 'number',
+        label: 'Strawberry sweets',
+        description: 'How many of the ten sweets in the fraction bag are strawberry',
+        min: 0,
+        max: 10,
+        step: 1,
+        color: '#8E90F5',
+    },
+    fractionViewHighlight: {
+        defaultValue: '',
+        type: 'text',
+        label: 'Fraction pair highlight',
+        description: 'Which quantity is highlighted across the bag and the fraction: wanted or total',
+        color: '#8E90F5',
+        bgColor: 'rgba(142, 144, 245, 0.22)',
+    },
+
+    // ─────────────────────────────────────────
+    // ASSESSMENT ANSWERS
+    // ─────────────────────────────────────────
+    answerOutcomeTotal: {
+        defaultValue: '',
+        type: 'text',
+        label: 'Answer: number of possible outcomes',
+        description: 'Student answer for how many sweets could come out of a bag of seven',
+        placeholder: '???',
+        correctAnswer: ['7', 'seven'],
+        color: '#8E90F5',
+    },
+    answerLikelyCompare: {
+        defaultValue: '',
         type: 'select',
-        label: 'Difficulty',
-        description: 'The difficulty level of the lesson',
-        options: ['easy', 'medium', 'hard', 'expert'],
+        label: 'Answer: comparing two chances',
+        description: 'Student answer comparing the chance of red with the chance of blue',
+        placeholder: '???',
+        correctAnswer: 'less likely than',
+        options: ['less likely than', 'just as likely as', 'more likely than'],
+        color: '#8E90F5',
     },
-
-    // ─────────────────────────────────────────
-    // BOOLEAN - Toggle switch
-    // ─────────────────────────────────────────
-    showHints: {
-        defaultValue: true,
-        type: 'boolean',
-        label: 'Show Hints',
-        description: 'Toggle to show or hide hints',
+    answerAppleFraction: {
+        defaultValue: '',
+        type: 'text',
+        label: 'Answer: chance as a fraction',
+        description: 'Student answer for the chance of picking an apple sweet, written as a fraction',
+        placeholder: '???',
+        correctAnswer: ['3/12', '1/4', '3 out of 12', '3 over 12', '1 out of 4'],
+        color: '#8E90F5',
     },
-
-    // ─────────────────────────────────────────
-    // ARRAY - List of numbers
-    // ─────────────────────────────────────────
-    dataPoints: {
-        defaultValue: [1, 4, 9, 16, 25],
-        type: 'array',
-        label: 'Data Points',
-        description: 'Y-values for plotting a graph',
+    answerApplePercent: {
+        defaultValue: '',
+        type: 'text',
+        label: 'Answer: chance as a percentage',
+        description: 'Extension answer for the same chance written as a percentage',
+        placeholder: '???',
+        correctAnswer: ['25%', '25', '25 %', '0.25'],
+        color: '#62D0AD',
     },
-
-    // ─────────────────────────────────────────
-    // OBJECT - Complex structured data
-    // ─────────────────────────────────────────
-    graphSettings: {
-        defaultValue: { 
-            xMin: -10, 
-            xMax: 10, 
-            showGrid: true 
-        },
-        type: 'object',
-        label: 'Graph Settings',
-        description: 'Configuration for the graph display',
-        schema: '{ xMin: number, xMax: number, showGrid: boolean }',
-    },
-    */
 };
 
 /**
