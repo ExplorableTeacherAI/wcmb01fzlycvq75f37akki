@@ -52,6 +52,20 @@ const INK_QUIET = "#CBD5E1";
 const PAPER_FILL = "#F1F5F9";
 const ACCENT = "#8E90F5";
 
+/** One muted colour per sweet — ten different flavours in the bag. */
+const SWEET_COLORS = [
+    "#62D0AD", // teal
+    "#8E90F5", // indigo
+    "#F7B23B", // amber
+    "#AC8BF9", // violet
+    "#F8A0CD", // rose
+    "#62CCF9", // sky
+    "#F4A89A", // coral
+    "#A8D5A2", // sage
+    "#FFCBA4", // peach
+    "#C9B8E8", // lavender
+];
+
 const EMPTY_MASK = "0".repeat(SWEET_COUNT);
 
 const EASE_150 = { transition: "opacity 150ms ease, stroke-width 150ms ease" } as const;
@@ -182,6 +196,7 @@ function OutcomeListDrawing() {
             {/* The sweets themselves — each one travels from bag to list. */}
             {Array.from({ length: SWEET_COUNT }, (_, index) => {
                 const listedHere = isListed(index);
+                const sweetColor = SWEET_COLORS[index % SWEET_COLORS.length];
                 const target = listedHere ? listPosition(index) : bagPosition(index);
                 const scale = listedHere ? LIST_RADIUS / BAG_RADIUS : 1;
                 return (
@@ -206,8 +221,8 @@ function OutcomeListDrawing() {
                             <circle r={BAG_RADIUS + 8} fill="transparent" />
                             <circle
                                 r={BAG_RADIUS}
-                                fill={listedHere ? ACCENT : PAPER_FILL}
-                                stroke={ACCENT}
+                                fill={listedHere ? sweetColor : PAPER_FILL}
+                                stroke={sweetColor}
                                 strokeWidth="2.5"
                             />
                         </g>
@@ -293,9 +308,9 @@ export const listingOutcomesBlocks: ReactElement[] = [
     <StackLayout key="layout-listing-outcomes-reflect" maxWidth="xl">
         <Block id="listing-outcomes-reflect" padding="sm">
             <EditableParagraph id="para-listing-outcomes-reflect" blockId="listing-outcomes-reflect">
-                Ten sweets, ten possible picks. Every sweet counts as its own outcome,
-                even the ones that look identical. That total is the number you are
-                about to divide by.
+                Ten sweets, ten possible picks. Every colour in the bag is its own
+                outcome, and the list has one place for each of them. That total is the
+                number you are about to divide by.
             </EditableParagraph>
         </Block>
     </StackLayout>,
