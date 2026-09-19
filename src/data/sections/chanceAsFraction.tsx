@@ -20,6 +20,7 @@ import {
     InlineFeedback,
     InlineLinkedHighlight,
     InlineScrubbleNumber,
+    InlineSpotColor,
     InteractionHintSequence,
 } from "@/components/atoms";
 import { Figure, FigureSlider, FormulaBlock } from "@/components/molecules";
@@ -29,6 +30,8 @@ import {
     getVariableInfo,
     linkedHighlightPropsFromDefinition,
     numberPropsFromDefinition,
+    scrubVarsFromDefinitions,
+    spotColorPropsFromDefinition,
 } from "../variables";
 
 // ── Domain model ─────────────────────────────────────────────────────────────
@@ -64,7 +67,8 @@ const INK = "#334155";
 const INK_STRUCTURE = "#64748B";
 const INK_QUIET = "#CBD5E1";
 const PAPER_FILL = "#F1F5F9";
-const ACCENT = "#8E90F5";
+const WANTED = "#F8A0CD"; // strawberry pink — the sweets you want, same as section 3
+const TOTAL = "#8E90F5"; // indigo — every sweet in the bag, same as the listed count in section 2
 const SUCCESS = "#22c55e";
 
 const EASE_150 = { transition: "opacity 150ms ease, stroke-width 150ms ease" } as const;
@@ -134,14 +138,14 @@ function FractionBagDrawing() {
                     >
                         <circle cx={cellX(index)} cy={SWEET_Y} r={SWEET_RADIUS + 7} fill="transparent" />
                         {isStrawberry && isActive("wanted") && (
-                            <circle cx={cellX(index)} cy={SWEET_Y} r={SWEET_RADIUS + 4} fill={ACCENT} opacity={0.28} />
+                            <circle cx={cellX(index)} cy={SWEET_Y} r={SWEET_RADIUS + 4} fill={WANTED} opacity={0.28} />
                         )}
                         <circle
                             cx={cellX(index)}
                             cy={SWEET_Y}
                             r={SWEET_RADIUS}
-                            fill={isStrawberry ? ACCENT : PAPER_FILL}
-                            stroke={isStrawberry ? ACCENT : INK_STRUCTURE}
+                            fill={isStrawberry ? WANTED : PAPER_FILL}
+                            stroke={isStrawberry ? WANTED : INK_STRUCTURE}
                             strokeWidth={isStrawberry && isActive("wanted") ? 3 : 2}
                             style={{ transition: "fill 150ms ease, stroke 150ms ease" }}
                         />
@@ -155,7 +159,7 @@ function FractionBagDrawing() {
                     <path
                         d={`M ${cellX(0) - 14} 124 L ${cellX(0) - 14} 130 L ${cellX(SWEET_COUNT - 1) + 14} 130 L ${cellX(SWEET_COUNT - 1) + 14} 124`}
                         fill="none"
-                        stroke={INK_STRUCTURE}
+                        stroke={TOTAL}
                         strokeWidth="8"
                         opacity={0.28}
                         strokeLinecap="round"
@@ -164,7 +168,7 @@ function FractionBagDrawing() {
                 <path
                     d={`M ${cellX(0) - 14} 124 L ${cellX(0) - 14} 130 L ${cellX(SWEET_COUNT - 1) + 14} 130 L ${cellX(SWEET_COUNT - 1) + 14} 124`}
                     fill="none"
-                    stroke={INK_STRUCTURE}
+                    stroke={TOTAL}
                     strokeWidth={isActive("total") ? 3 : 2}
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -172,7 +176,7 @@ function FractionBagDrawing() {
                 <text
                     x={VIEW_WIDTH - PAD}
                     y="160"
-                    fill={INK}
+                    fill={TOTAL}
                     fontSize="12"
                     textAnchor="end"
                     style={{ fontVariantNumeric: "tabular-nums" }}
@@ -184,7 +188,7 @@ function FractionBagDrawing() {
             <text
                 x={PAD}
                 y="160"
-                fill={ACCENT}
+                fill={WANTED}
                 fontSize="12"
                 opacity={opacity("wantedLabel")}
                 style={{ ...EASE_150, fontVariantNumeric: "tabular-nums" }}
@@ -269,8 +273,8 @@ function FractionValueDrawing() {
                             width={BAR_CELL_WIDTH}
                             height={BAR_HEIGHT}
                             rx="4"
-                            fill={isFilled ? ACCENT : PAPER_FILL}
-                            stroke={isFilled ? ACCENT : INK_STRUCTURE}
+                            fill={isFilled ? WANTED : PAPER_FILL}
+                            stroke={isFilled ? WANTED : INK_STRUCTURE}
                             strokeWidth={isFilled && isActive("wanted") ? 3 : 2}
                             style={{ transition: "fill 150ms ease, stroke 150ms ease" }}
                         />
@@ -283,7 +287,7 @@ function FractionValueDrawing() {
                 <text
                     x="104"
                     y="150"
-                    fill={ACCENT}
+                    fill={WANTED}
                     fontSize="26"
                     textAnchor="middle"
                     fontWeight={isActive("wanted") ? 700 : 500}
@@ -297,7 +301,7 @@ function FractionValueDrawing() {
                 <text
                     x="104"
                     y="192"
-                    fill={INK}
+                    fill={TOTAL}
                     fontSize="26"
                     textAnchor="middle"
                     fontWeight={isActive("total") ? 700 : 500}
@@ -367,8 +371,11 @@ function RaffleReadout() {
     const divisor = strawberry === 0 ? SWEET_COUNT : greatestCommonDivisor(strawberry, SWEET_COUNT);
     const simplified = `${strawberry / divisor}/${SWEET_COUNT / divisor}`;
     return (
-        <span style={{ color: ACCENT, fontVariantNumeric: "tabular-nums" }}>
-            {`${strawberry} out of ${SWEET_COUNT}, or ${simplified}, or ${formatChance(strawberry / SWEET_COUNT)}`}
+        <span style={{ fontVariantNumeric: "tabular-nums" }}>
+            <span style={{ color: WANTED, fontWeight: 600 }}>{strawberry}</span>
+            {" out of "}
+            <span style={{ color: TOTAL, fontWeight: 600 }}>{SWEET_COUNT}</span>
+            {`, or ${simplified}, or ${formatChance(strawberry / SWEET_COUNT)}`}
         </span>
     );
 }
@@ -401,7 +408,7 @@ export const chanceAsFractionBlocks: ReactElement[] = [
                     id="link-chance-fraction-total"
                     varName="fractionViewHighlight"
                     highlightId="total"
-                    {...linkedHighlightPropsFromDefinition(getVariableInfo("fractionViewHighlight"))}
+                    {...linkedHighlightPropsFromDefinition(getVariableInfo("totalOutcomes"))}
                 >
                     all the sweets in the bag
                 </InlineLinkedHighlight>
@@ -410,7 +417,15 @@ export const chanceAsFractionBlocks: ReactElement[] = [
                     varName="fractionBagStrawberry"
                     {...numberPropsFromDefinition(getVariableInfo("fractionBagStrawberry"))}
                 />
-                {" "}of the ten are strawberry. Click the sweets and the fraction beside
+                {" "}of the{" "}
+                <InlineSpotColor
+                    id="spot-chance-fraction-ten"
+                    varName="totalOutcomes"
+                    {...spotColorPropsFromDefinition(getVariableInfo("totalOutcomes"))}
+                >
+                    ten
+                </InlineSpotColor>
+                {" "}are strawberry. Click the sweets and the fraction beside
                 them rewrites itself.
             </EditableParagraph>
         </Block>
@@ -428,17 +443,19 @@ export const chanceAsFractionBlocks: ReactElement[] = [
     <StackLayout key="layout-chance-fraction-formula" maxWidth="xl">
         <Block id="chance-fraction-formula" padding="lg">
             <FormulaBlock
-                latex="P(\text{strawberry}) = \frac{\highlight{wanted}{\text{sweets you want}}}{\highlight{total}{\text{sweets in the bag}}}"
+                latex="P(\text{strawberry}) = \frac{\highlight{wanted}{\text{sweets you want}}}{\highlight{total}{\text{sweets in the bag}}} = \frac{\scrub{fractionBagStrawberry}}{\clr{total}{10}}"
+                colorMap={{ total: "#8E90F5" }}
+                variables={scrubVarsFromDefinitions(["fractionBagStrawberry"])}
                 linkedHighlights={{
                     wanted: {
                         varName: "fractionViewHighlight",
-                        color: "#8E90F5",
-                        bgColor: "rgba(142, 144, 245, 0.22)",
+                        color: "#F8A0CD",
+                        bgColor: "rgba(248, 160, 205, 0.22)",
                     },
                     total: {
                         varName: "fractionViewHighlight",
-                        color: "#64748B",
-                        bgColor: "rgba(100, 116, 139, 0.18)",
+                        color: "#8E90F5",
+                        bgColor: "rgba(142, 144, 245, 0.22)",
                     },
                 }}
             />
@@ -458,8 +475,15 @@ export const chanceAsFractionBlocks: ReactElement[] = [
     <StackLayout key="layout-chance-fraction-raffle" maxWidth="xl">
         <Block id="chance-fraction-raffle" padding="sm">
             <EditableParagraph id="para-chance-fraction-raffle" blockId="chance-fraction-raffle">
-                Swap the sweets for a class raffle. Ten tickets go into the hat and you
-                hold{" "}
+                Swap the sweets for a class raffle.{" "}
+                <InlineSpotColor
+                    id="spot-chance-fraction-raffle-tickets"
+                    varName="totalOutcomes"
+                    {...spotColorPropsFromDefinition(getVariableInfo("totalOutcomes"))}
+                >
+                    Ten tickets
+                </InlineSpotColor>
+                {" "}go into the hat and you hold{" "}
                 <InlineScrubbleNumber
                     varName="fractionBagStrawberry"
                     {...numberPropsFromDefinition(getVariableInfo("fractionBagStrawberry"))}
@@ -491,7 +515,7 @@ export const chanceAsFractionBlocks: ReactElement[] = [
                         steps: [
                             {
                                 gesture: "click",
-                                label: "Click until three sweets are indigo, then read the fraction beside them",
+                                label: "Click until three sweets are pink, then read the fraction beside them",
                                 position: { x: "14%", y: "45%" },
                                 completionVar: "fractionBagStrawberry",
                                 completionValue: 3,

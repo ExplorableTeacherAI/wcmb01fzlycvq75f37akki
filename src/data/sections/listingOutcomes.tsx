@@ -16,6 +16,8 @@ import {
     InlineClozeInput,
     InlineFeedback,
     InlineLinkedHighlight,
+    InlineSpotColor,
+    InlineTooltip,
     InteractionHintSequence,
 } from "@/components/atoms";
 import { Figure } from "@/components/molecules";
@@ -24,6 +26,7 @@ import {
     clozePropsFromDefinition,
     getVariableInfo,
     linkedHighlightPropsFromDefinition,
+    spotColorPropsFromDefinition,
 } from "../variables";
 
 // ── Domain model ─────────────────────────────────────────────────────────────
@@ -308,9 +311,22 @@ export const listingOutcomesBlocks: ReactElement[] = [
     <StackLayout key="layout-listing-outcomes-reflect" maxWidth="xl">
         <Block id="listing-outcomes-reflect" padding="sm">
             <EditableParagraph id="para-listing-outcomes-reflect" blockId="listing-outcomes-reflect">
-                Ten sweets, ten possible picks. Every colour in the bag is its own
-                outcome, and the list has one place for each of them. That total is the
-                number you are about to divide by.
+                Ten sweets, ten possible picks. Every colour in the bag is its own{" "}
+                <InlineTooltip
+                    id="tooltip-listing-outcomes-outcome"
+                    tooltip="One single result that could happen. Here, one particular sweet coming out of the bag."
+                >
+                    outcome
+                </InlineTooltip>
+                , and the list has one place for each of them.{" "}
+                <InlineSpotColor
+                    id="spot-listing-outcomes-total"
+                    varName="totalOutcomes"
+                    {...spotColorPropsFromDefinition(getVariableInfo("totalOutcomes"))}
+                >
+                    That total
+                </InlineSpotColor>
+                {" "}is the number you are about to divide by.
             </EditableParagraph>
         </Block>
     </StackLayout>,

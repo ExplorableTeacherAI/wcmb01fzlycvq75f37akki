@@ -143,7 +143,7 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         min: 0,
         max: 10,
         step: 1,
-        color: '#8E90F5',
+        color: '#F8A0CD',
     },
     chanceLineChecked: {
         defaultValue: 0,
@@ -166,13 +166,32 @@ export const variableDefinitions: Record<string, VariableDefinition> = {
         min: 0,
         max: 10,
         step: 1,
-        color: '#8E90F5',
+        color: '#F8A0CD',
     },
     fractionViewHighlight: {
         defaultValue: '',
         type: 'text',
         label: 'Fraction pair highlight',
-        description: 'Which quantity is highlighted across the bag and the fraction: wanted or total',
+        description: 'Which quantity is highlighted across the bag and the fraction: wanted or total. Its color is the wanted (strawberry) pink; the total uses totalOutcomes',
+        color: '#F8A0CD',
+        bgColor: 'rgba(248, 160, 205, 0.22)',
+    },
+
+    // ─────────────────────────────────────────
+    // LESSON-WIDE COLOURS (prose matches the figures)
+    // ─────────────────────────────────────────
+    strawberrySweets: {
+        defaultValue: 'strawberry',
+        type: 'spotColor',
+        label: 'Strawberry sweets',
+        description: 'Colour of the sweets you want (strawberry) and of the true-chance marker in every figure',
+        color: '#F8A0CD',
+    },
+    totalOutcomes: {
+        defaultValue: 'total',
+        type: 'spotColor',
+        label: 'All the sweets in the bag',
+        description: 'Colour of the total number of possible outcomes: the listed count, the bracket under the bag and the denominator',
         color: '#8E90F5',
         bgColor: 'rgba(142, 144, 245, 0.22)',
     },

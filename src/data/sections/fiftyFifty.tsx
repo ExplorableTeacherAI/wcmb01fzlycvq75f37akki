@@ -16,6 +16,8 @@ import {
     InlineClozeChoice,
     InlineFeedback,
     InlineScrubbleNumber,
+    InlineSpotColor,
+    InlineTrigger,
     InteractionHintSequence,
 } from "@/components/atoms";
 import { Figure } from "@/components/molecules";
@@ -25,6 +27,7 @@ import {
     choicePropsFromDefinition,
     getVariableInfo,
     numberPropsFromDefinition,
+    spotColorPropsFromDefinition,
 } from "../variables";
 
 // ── Domain model ─────────────────────────────────────────────────────────────
@@ -324,9 +327,32 @@ export const fiftyFiftyBlocks: ReactElement[] = [
     <StackLayout key="layout-fifty-fifty-setup" maxWidth="xl">
         <Block id="fifty-fifty-setup" padding="sm">
             <EditableParagraph id="para-fifty-fifty-setup" blockId="fifty-fifty-setup">
-                Here is the same bag, opened up: four strawberry sweets and six lemon
-                ones. Before you count anything, drag the teal marker to where you think
-                the chance of pulling out a strawberry sits, then check it.
+                Here is the same bag, opened up:{" "}
+                <InlineTrigger
+                    id="trigger-fifty-fifty-original-bag"
+                    varName="chanceLineStrawberry"
+                    value={DEFAULT_STRAWBERRY}
+                    icon="refresh"
+                >
+                    four strawberry sweets and six lemon ones
+                </InlineTrigger>
+                . Before you count anything, drag the{" "}
+                <InlineSpotColor
+                    id="spot-fifty-fifty-guess-marker"
+                    varName="guessChance"
+                    {...spotColorPropsFromDefinition(getVariableInfo("guessChance"))}
+                >
+                    teal marker
+                </InlineSpotColor>
+                {" "}to where you think the chance of pulling out a{" "}
+                <InlineSpotColor
+                    id="spot-fifty-fifty-strawberry"
+                    varName="strawberrySweets"
+                    {...spotColorPropsFromDefinition(getVariableInfo("strawberrySweets"))}
+                >
+                    strawberry
+                </InlineSpotColor>
+                {" "}sits, then check it.
             </EditableParagraph>
         </Block>
     </StackLayout>,
@@ -346,7 +372,15 @@ export const fiftyFiftyBlocks: ReactElement[] = [
                     {...numberPropsFromDefinition(getVariableInfo("guessChance"))}
                     formatValue={(value) => `${Math.round(value * 100)}%`}
                 />
-                , and the true chance is the pink marker. Two possible flavours do not
+                , and the true chance is the{" "}
+                <InlineSpotColor
+                    id="spot-fifty-fifty-true-marker"
+                    varName="strawberrySweets"
+                    {...spotColorPropsFromDefinition(getVariableInfo("strawberrySweets"))}
+                >
+                    pink marker
+                </InlineSpotColor>
+                . Two possible flavours do not
                 mean two equal chances. Click any sweet to change the bag, and the
                 pink marker moves at once.
             </EditableParagraph>

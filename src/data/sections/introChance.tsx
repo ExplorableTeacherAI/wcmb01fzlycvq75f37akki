@@ -8,7 +8,7 @@
 import { type ReactElement } from "react";
 import { StackLayout } from "@/components/layouts";
 import { Block } from "@/components/templates";
-import { EditableH1, EditableParagraph, InlineToggle } from "@/components/atoms";
+import { EditableH1, EditableParagraph, InlineToggle, InlineTooltip } from "@/components/atoms";
 import { useVar } from "@/stores";
 import { getVariableInfo, togglePropsFromDefinition } from "../variables";
 
@@ -48,7 +48,14 @@ export const introChanceBlocks: ReactElement[] = [
             <EditableParagraph id="para-intro-chance-idea" blockId="intro-chance-idea">
                 That does not mean every flavour has the same chance. Some flavours are
                 packed into the bag more than others, and that changes how likely each
-                one is. Probability is the maths of putting a number on it.
+                one is.{" "}
+                <InlineTooltip
+                    id="tooltip-intro-chance-probability"
+                    tooltip="A number from 0 to 1 (or 0% to 100%) that says how likely something is to happen."
+                >
+                    Probability
+                </InlineTooltip>
+                {" "}is the maths of putting a number on it.
             </EditableParagraph>
         </Block>
     </StackLayout>,
@@ -64,8 +71,14 @@ export const introChanceBlocks: ReactElement[] = [
                     {...togglePropsFromDefinition(getVariableInfo("everydayChance"))}
                 />
                 {" "}<EverydayChanceClause /> By the end of this page you will be able to
-                work out the chance of one pick and write it as a fraction, then simplify
-                it or turn it into a percentage.
+                work out the chance of one pick and write it as a fraction, then{" "}
+                <InlineTooltip
+                    id="tooltip-intro-chance-simplify"
+                    tooltip="Rewrite a fraction with smaller numbers that mean the same amount, such as 2/4 written as 1/2."
+                >
+                    simplify
+                </InlineTooltip>
+                {" "}it or turn it into a percentage.
             </EditableParagraph>
         </Block>
     </StackLayout>,
